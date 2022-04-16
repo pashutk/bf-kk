@@ -15,8 +15,25 @@ fun size(this: listZipper<a>): int {
   this.lefts.length + 1 + this.rights.length
 }
 
-fun start(this: listZipper<a>): listZipper<a> {
-  // TODO
+// TODO: get rid of exn eff by rewriting reverse-append so it preserves non-emptiness of newList
+fun start(this: listZipper<a>): exn listZipper<a> {
+  match this.lefts {
+    Nil -> this
+    Cons ->
+      val newTail = Cons(this.focus, this.rights)
+      val newList = this.lefts.reverse-append(newTail)
+      ListZipper(Nil, newList.head.unjust, newList.tail)
+  }
+}
+
+fun end(this: listZipper<a>): exn listZipper<a> {
+  match this.rights {
+    Nil -> this
+    Cons ->
+      val newTail = Cons(this.focus, this.lefts)
+      val newList = this.rights.reverse-append(newTail)
+      ListZipper(newList.tail, newList.head.unjust, Nil)
+  }
 }
 
 fun left(this: listZipper<a>): maybe<listZipper<a>> {
@@ -26,17 +43,17 @@ fun left(this: listZipper<a>): maybe<listZipper<a>> {
   }
 }
 
-fun leftW(this: listZipper<a>): listZipper<a> {
+fun leftW(this: listZipper<a>): exn listZipper<a> {
   this.left.default(this.end)
 }
 
 fun right(this: listZipper<a>): maybe<listZipper<a>> {
   match this.rights {
     Nil -> Nothing
-    Const(head, tail) -> Just(ListZipper(Cons(this.focus, this.lefts), head, tail))
+    Cons(head, tail) -> Just(ListZipper(Cons(this.focus, this.lefts), head, tail))
   }
 }
 
-fun rightW(this: listZipper<a>): listZipper<a> {
+fun rightW(this: listZipper<a>): exn listZipper<a> {
   this.right.default(this.start)
 }

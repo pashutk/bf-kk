@@ -11,11 +11,11 @@ fun createMemory(cellCount: int, cellSize: int): maybe<memory> {
   listZipper(l).map(fn(i) Memory(i, cellSize))
 }
 
-fun left(this: memory): memory {
+fun left(this: memory): exn memory {
   this(zipper = this.zipper.leftW)
 }
 
-fun right(this: memory): memory {
+fun right(this: memory): exn memory {
   this(zipper = this.zipper.rightW)
 }
 
@@ -29,9 +29,9 @@ fun show(m: maybe<memory>): string {
 fun show(this: memory): string {
   fun showContent(lz: listZipper<boundedInt>): string {
     [
-      lz.left.reverse.map(fn(i) i.value.show).join(", "),
+      lz.lefts.reverse.map(fn(i) i.value.show).join(", "),
       ("[" ++ lz.focus.value.show ++ "]"),
-      lz.right.map(fn(i) i.value.show).join(", ")
+      lz.rights.map(fn(i) i.value.show).join(", ")
     ].join(" ")
   }
 

@@ -3,20 +3,35 @@ import boundedInt;
 
 struct memory {
   zipper: listZipper<boundedInt>
-  cellSize: int
 }
 
 fun createMemory(cellCount: int, cellSize: int): maybe<memory> {
   val l = list(0, cellCount.dec, fn(i) { uint(cellSize) })
-  listZipper(l).map(fn(i) Memory(i, cellSize))
+  listZipper(l).map(Memory)
 }
 
-fun left(this: memory): exn memory {
+fun left(this: memory): memory {
   this(zipper = this.zipper.leftW)
 }
 
-fun right(this: memory): exn memory {
+fun right(this: memory): memory {
   this(zipper = this.zipper.rightW)
+}
+
+fun inc(this: memory): memory {
+  this(zipper = this.zipper.modify(inc))
+}
+
+fun dec(this: memory): memory {
+  this(zipper = this.zipper.modify(dec))
+}
+
+fun read(this: memory): int {
+  this.zipper.focus.value
+}
+
+fun write(this: memory, value: int): memory {
+  this(zipper = this.zipper.modify(fn(i) i.set(value)))
 }
 
 fun show(m: maybe<memory>): string {
@@ -27,19 +42,11 @@ fun show(m: maybe<memory>): string {
 }
 
 fun show(this: memory): string {
-  fun showContent(lz: listZipper<boundedInt>): string {
-    [
-      lz.lefts.reverse.map(fn(i) i.value.show).join(", "),
-      ("[" ++ lz.focus.value.show ++ "]"),
-      lz.rights.map(fn(i) i.value.show).join(", ")
-    ].join(" ")
-  }
-
   "Memory<"
-    ++ this.cellSize.show
-    ++ ", "
     ++ this.zipper.size.show
+    ++ ", "
+    ++ this.zipper.focus.size.show
     ++ "> {"
-    ++ this.zipper.showContent
+    ++ this.zipper.show(showValue)
     ++ "}"
 }

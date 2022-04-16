@@ -13,6 +13,10 @@ fun listZipper(l: list<a>): maybe<listZipper<a>> {
   }
 }
 
+fun listZipper(l: nonEmptyList<a>): listZipper<a> {
+  ListZipper(Nil, l.head, l.tail)
+}
+
 fun size(this: listZipper<a>): int {
   this.lefts.length + 1 + this.rights.length
 }
@@ -57,4 +61,20 @@ fun right(this: listZipper<a>): maybe<listZipper<a>> {
 
 fun rightW(this: listZipper<a>): listZipper<a> {
   this.right.default(this.start)
+}
+
+fun show(this: listZipper<a>, showItem: (a) -> e string): e string {
+  [
+    this.lefts.reverse.show-list(showItem),
+    this.focus.showItem,
+    this.rights.show-list(showItem)
+  ].join(" ")
+}
+
+fun set(this: listZipper<a>, a: a): listZipper<a> {
+  this(focus = a)
+}
+
+fun modify(this: listZipper<a>, f: (a) -> a): listZipper<a> {
+  this.set(f(this.focus))
 }

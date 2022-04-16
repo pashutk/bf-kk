@@ -1,3 +1,5 @@
+import nonEmptyList;
+
 struct listZipper<a> {
   lefts: list<a>
   focus: a
@@ -15,24 +17,23 @@ fun size(this: listZipper<a>): int {
   this.lefts.length + 1 + this.rights.length
 }
 
-// TODO: get rid of exn eff by rewriting reverse-append so it preserves non-emptiness of newList
-fun start(this: listZipper<a>): exn listZipper<a> {
+fun start(this: listZipper<a>): listZipper<a> {
   match this.lefts {
     Nil -> this
     Cons ->
-      val newTail = Cons(this.focus, this.rights)
+      val newTail = cons(this.focus, this.rights)
       val newList = this.lefts.reverse-append(newTail)
-      ListZipper(Nil, newList.head.unjust, newList.tail)
+      ListZipper(Nil, newList.head, newList.tail)
   }
 }
 
-fun end(this: listZipper<a>): exn listZipper<a> {
+fun end(this: listZipper<a>): listZipper<a> {
   match this.rights {
     Nil -> this
     Cons ->
-      val newTail = Cons(this.focus, this.lefts)
+      val newTail = cons(this.focus, this.lefts)
       val newList = this.rights.reverse-append(newTail)
-      ListZipper(newList.tail, newList.head.unjust, Nil)
+      ListZipper(newList.tail, newList.head, Nil)
   }
 }
 
@@ -43,7 +44,7 @@ fun left(this: listZipper<a>): maybe<listZipper<a>> {
   }
 }
 
-fun leftW(this: listZipper<a>): exn listZipper<a> {
+fun leftW(this: listZipper<a>): listZipper<a> {
   this.left.default(this.end)
 }
 
@@ -54,6 +55,6 @@ fun right(this: listZipper<a>): maybe<listZipper<a>> {
   }
 }
 
-fun rightW(this: listZipper<a>): exn listZipper<a> {
+fun rightW(this: listZipper<a>): listZipper<a> {
   this.right.default(this.start)
 }

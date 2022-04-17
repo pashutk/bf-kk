@@ -86,3 +86,7 @@ fun pnodes(): <parse, div> list<node> {
 fun parser(input: string) {
   parse-eof(input.slice, pnodes)
 }
+
+fun parserEither(input: string) {
+  parser(input).either
+}

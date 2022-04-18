@@ -4,7 +4,7 @@ import examplePrograms
 import memory
 import os
 
-fun interpret(n: node, mem: memory): <console, div, exn, readChar | e> memory {
+fun interpret(n: node, mem: memory): <console, div, readChar | e> memory {
   match n {
     Mvl -> mem.left
     Mvr -> mem.right

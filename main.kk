@@ -4,7 +4,7 @@ import examplePrograms
 import memory
 import os
 
-fun interpret(n: node, mem: memory): <console, div, exn | e> memory {
+fun interpret(n: node, mem: memory): <console, div, exn, readChar | e> memory {
   match n {
     Mvl -> mem.left
     Mvr -> mem.right
@@ -36,5 +36,6 @@ fun main() {
   var memoryState := createMemory(cellCount = 30_000, cellSize = 256)
     .unjust
 
+  with readlineBuffer
   ast.foreach(fn(n) { memoryState := n.interpret(memoryState) })
 }

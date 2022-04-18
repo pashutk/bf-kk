@@ -32,3 +32,5 @@ val gameOfLifeProgram = "[life.b -- John Horton Conway's Game of Life" ++
   "Grid wraps toroidally. Board size in parentheses in first line (2-166 work)." ++
   "This program is licensed under a Creative Commons Attribution-ShareAlike 4.0" ++
   "International License (http://creativecommons.org/licenses/by-sa/4.0/).]"
+
+val benchy = "++++++++[->-[->-[->-[-]<]<]<]>++++++++[<++++++++++>-]<[>+>+<<-]>-.>-----.>"
